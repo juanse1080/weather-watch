@@ -1,5 +1,6 @@
 import { ParamsRequest } from "@/interfaces";
 import prisma from "@/libs/prisma";
+import { transformUser } from "@/utils/models";
 import { InternalErrorResponse, NotFoundResponse } from "@/utils/response";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -10,6 +11,14 @@ export async function GET(
 ) {
   try {
     const data = await prisma.user.findFirst({
+      include: {
+        roles: {
+          select: {
+            code: true,
+            actions: true,
+          },
+        },
+      },
       where: {
         id: +params.id,
       },
@@ -17,7 +26,7 @@ export async function GET(
 
     if (!data) return NotFoundResponse("User not found");
 
-    return NextResponse.json(data, { status: 200 });
+    return NextResponse.json(transformUser(data), { status: 200 });
   } catch (error) {
     return InternalErrorResponse(error);
   }
@@ -29,6 +38,14 @@ export async function DELETE(
 ) {
   try {
     const data = await prisma.user.findFirst({
+      include: {
+        roles: {
+          select: {
+            code: true,
+            actions: true,
+          },
+        },
+      },
       where: {
         id: +params.id,
       },
@@ -42,7 +59,7 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json(data, { status: 200 });
+    return NextResponse.json(transformUser(data), { status: 200 });
   } catch (error) {
     return InternalErrorResponse(error);
   }
