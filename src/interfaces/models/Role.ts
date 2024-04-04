@@ -1,6 +1,6 @@
-import { Action } from "@prisma/client";
+import { Action } from '@prisma/client'
 
 export interface RolePrisma {
-  code: string;
-  actions: Action[];
+  code: string
+  actions: Action[]
 }

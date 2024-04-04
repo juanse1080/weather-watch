@@ -1,7 +1,7 @@
 namespace NodeJS {
   interface ProcessEnv {
-    DATABASE_URL: string;
-    SECRET_KEY: string;
-    EXPIRED_TOKEN: string;
+    DATABASE_URL: string
+    SECRET_KEY: string
+    EXPIRED_TOKEN: string
   }
 }
