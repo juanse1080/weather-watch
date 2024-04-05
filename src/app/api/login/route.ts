@@ -1,4 +1,5 @@
 import prisma from '@/libs/prisma'
+import { transformZodIssues } from '@/utils/errors'
 import { transformUser } from '@/utils/models'
 import {
   BadRequestResponse,
@@ -20,7 +21,8 @@ export async function POST(request: NextRequest) {
     })
 
     const valid = schema.safeParse(body)
-    if (!valid.success) return BadRequestResponse(valid.error.errors)
+    if (!valid.success)
+      return BadRequestResponse(transformZodIssues(valid.error.errors))
 
     const { email, password } = body
     const data = await prisma.user.findFirst({

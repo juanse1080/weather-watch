@@ -1,27 +1,19 @@
 import prisma from '@/libs/prisma'
+import { registerSchema } from '@/schemas/register'
+import { transformZodIssues } from '@/utils/errors'
 import { transformUser } from '@/utils/models'
 import { BadRequestResponse, InternalErrorResponse } from '@/utils/response'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const schema = z
-      .object({
-        name: z.string(),
-        email: z.string().email(),
-        password: z.string(),
-        confirmPassword: z.string(),
-      })
-      .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords don't match",
-        path: ['confirmPassword'],
-      })
-    const valid = schema.safeParse(body)
-    if (!valid.success) return BadRequestResponse(valid.error.errors)
+
+    const valid = registerSchema.safeParse(body)
+    if (!valid.success)
+      return BadRequestResponse(transformZodIssues(valid.error.errors))
 
     const { name, email, password } = body
     const user = await prisma.user.findFirst({
@@ -29,7 +21,17 @@ export async function POST(request: NextRequest) {
         email,
       },
     })
-    if (user) return BadRequestResponse(undefined, 'User already exists')
+    if (user)
+      return BadRequestResponse(
+        transformZodIssues([
+          {
+            message: 'User already exists',
+            path: ['email'],
+            type: 'custom',
+          },
+        ]),
+        'User already exists',
+      )
 
     const hashedPassword = await bcrypt.hash(password, 10)
     const newUser = transformUser(
