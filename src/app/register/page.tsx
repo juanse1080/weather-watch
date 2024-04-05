@@ -4,8 +4,10 @@ import { Button, Input } from '@/components/atoms'
 import useLazyFetch from '@/hooks/useLazyFetch'
 import { registerSchema, registerSchemaType } from '@/schemas/register'
 import { transformZodIssuesToBasicObject } from '@/utils/errors'
+import { saveState } from '@/utils/localStorage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { ZodIssue } from 'zod'
 
@@ -17,9 +19,12 @@ const defaultValues: Partial<registerSchemaType> = {
 }
 
 export default function RegisterPage() {
+  const router = useRouter()
+
   const onError = (
     error: AxiosError<{
       errors: Partial<Record<keyof registerSchemaType, ZodIssue[]>>
+      message: string
     }>,
   ) => {
     if (error.response?.status === 400 && error.response?.data?.errors) {
@@ -39,7 +44,9 @@ export default function RegisterPage() {
   )
 
   const onSubmit = async (data: registerSchemaType) => {
-    await fetchData({ data, method: 'POST' })
+    const response = await fetchData({ data, method: 'POST' })
+    saveState('auth', response)
+    router.replace('/')
   }
 
   const {
@@ -54,12 +61,13 @@ export default function RegisterPage() {
 
   return (
     <form
-      className="flex flex-col gap-4 p-4"
+      className="flex flex-col items-end gap-4 p-4"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
       <Input
         required
+        fulWidth
         label="Name"
         error={!!errors.name}
         helperText={errors?.name?.message}
@@ -67,6 +75,7 @@ export default function RegisterPage() {
       />
       <Input
         required
+        fulWidth
         label="Email"
         error={!!errors.email}
         helperText={errors?.email?.message}
@@ -74,6 +83,7 @@ export default function RegisterPage() {
       />
       <Input
         required
+        fulWidth
         label="Password"
         error={!!errors.password}
         helperText={errors?.password?.message}
@@ -81,6 +91,7 @@ export default function RegisterPage() {
       />
       <Input
         required
+        fulWidth
         label="Confirm password"
         error={!!errors.confirmPassword}
         helperText={errors?.confirmPassword?.message}
