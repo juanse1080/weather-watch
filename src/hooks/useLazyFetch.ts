@@ -23,6 +23,8 @@ const useLazyFetch = <
 
         setResponse(response.data as TResponse)
         setLoading(false)
+        
+        return response.data as TResponse
       } catch (error) {
         setError(error)
         setLoading(false)
