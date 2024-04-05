@@ -1,26 +1,21 @@
 import prisma from '@/libs/prisma'
+import { loginSchema } from '@/schemas/login'
 import { transformZodIssues } from '@/utils/errors'
 import { transformUser } from '@/utils/models'
 import {
   BadRequestResponse,
   InternalErrorResponse,
-  NotFoundResponse,
   UnauthorizedRequestResponse,
 } from '@/utils/response'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const schema = z.object({
-      email: z.string().email(),
-      password: z.string(),
-    })
 
-    const valid = schema.safeParse(body)
+    const valid = loginSchema.safeParse(body)
     if (!valid.success)
       return BadRequestResponse(transformZodIssues(valid.error.errors))
 
@@ -38,7 +33,7 @@ export async function POST(request: NextRequest) {
         email,
       },
     })
-    if (!data) return NotFoundResponse('User not found')
+    if (!data) return UnauthorizedRequestResponse()
 
     const isCorrect: boolean = await bcrypt.compare(password, data.password)
     if (!isCorrect) return UnauthorizedRequestResponse()
