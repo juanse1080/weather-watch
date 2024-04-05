@@ -9,9 +9,9 @@ export const InternalErrorResponse = (
 ) => NextResponse.json({ message, error }, { status: 500 })
 
 export const BadRequestResponse = (
-  data?: unknown,
+  errors?: unknown,
   message: string = 'Bad request',
-) => NextResponse.json({ message, data }, { status: 404 })
+) => NextResponse.json({ message, errors }, { status: 400 })
 
 export const UnauthorizedRequestResponse = (message: string = 'Unauthorized') =>
   NextResponse.json({ message }, { status: 401 })
