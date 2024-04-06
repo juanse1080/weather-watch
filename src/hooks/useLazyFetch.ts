@@ -14,7 +14,7 @@ const useLazyFetch = <
       try {
         setLoading(true)
         const response = await axios(url, {
-          baseURL: 'http://localhost:3000/api', // TODO: add env
+          baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
           ...options,
         })
 

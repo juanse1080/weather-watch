@@ -6,5 +6,6 @@ namespace NodeJS {
     WEATHER_BASE_URL: string
     WEATHER_USER_NAME: string
     WEATHER_PASSWORD: string
+    NEXT_PUBLIC_API_BASE_URL: string
   }
 }
