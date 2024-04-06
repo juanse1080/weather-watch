@@ -4,9 +4,7 @@ import Link from 'next/link'
 import { PropsWithChildren } from 'react'
 import LogoutButton from './logout'
 
-const RootLayout = async ({
-  children,
-}: Readonly<PropsWithChildren<Record<string, any>>>) => {
+const RootLayout = async ({ children }: Readonly<PropsWithChildren>) => {
   const auth = await getAuth()
   const shouldReadUsers = auth?.actions.includes(UserAction.READ)
 
