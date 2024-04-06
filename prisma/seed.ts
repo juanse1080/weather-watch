@@ -12,20 +12,36 @@ async function main() {
       actions: {
         create: [
           {
-            name: 'User show',
-            code: 'user.show',
+            name: 'User read',
+            code: 'user.read',
           },
           {
             name: 'User create',
             code: 'user.create',
           },
           {
-            name: 'User edit',
-            code: 'user.edit',
+            name: 'User update',
+            code: 'user.update',
           },
           {
             name: 'User delete',
             code: 'user.delete',
+          },
+          {
+            name: 'Role read',
+            code: 'role.read',
+          },
+          {
+            name: 'Role create',
+            code: 'role.create',
+          },
+          {
+            name: 'Role update',
+            code: 'role.update',
+          },
+          {
+            name: 'Role delete',
+            code: 'role.delete',
           },
         ],
       },
