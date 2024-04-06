@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-type genericItem = Record<string, any>
+export type genericItem = Record<string, any>
 
 export interface Cell<T extends genericItem> {
   label: string
