@@ -1,5 +1,3 @@
-'use server'
-
 import { RolePrisma, UserModel, UserPrisma } from '@/interfaces'
 
 export const rolesToActions = (roles: RolePrisma[]) => {
