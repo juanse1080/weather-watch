@@ -1,13 +1,12 @@
 'use client'
 
 import { Button, Input } from '@/components/atoms'
+import useAuth from '@/hooks/useAuth'
 import useLazyFetch from '@/hooks/useLazyFetch'
 import { loginSchema, loginSchemaType } from '@/schemas/login'
 import { transformZodIssuesToBasicObject } from '@/utils/errors'
-import { saveState } from '@/utils/localStorage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ZodIssue } from 'zod'
@@ -18,7 +17,7 @@ const defaultValues: Partial<loginSchemaType> = {
 }
 
 export default function LoginPage() {
-  const router = useRouter()
+  const { login } = useAuth()
   const [apiError, setApiError] = useState<string>()
 
   const onError = (
@@ -41,16 +40,16 @@ export default function LoginPage() {
       setApiError(error.response?.data?.message)
   }
 
-  const { fetchData, loading } = useLazyFetch<any, loginSchemaType>(
-    'login',
-    onError,
-  )
+  const { fetchData, loading } = useLazyFetch<any, loginSchemaType>('login')
 
   const onSubmit = async (data: loginSchemaType) => {
-    const response = await fetchData({ data, method: 'POST' })
-    setApiError(undefined)
-    saveState('auth', response)
-    router.replace('/')
+    try {
+      const response = await fetchData({ data, method: 'POST' })
+      setApiError(undefined)
+      login(response)
+    } catch (error: any) {
+      onError(error)
+    }
   }
 
   const {
@@ -65,7 +64,9 @@ export default function LoginPage() {
 
   return (
     <>
-      {apiError && <div className="bg-red-50 w-full p-3">{apiError}</div>}
+      {apiError && (
+        <div className="bg-red-50 w-full p-3 rounded-md">{apiError}</div>
+      )}
       <form
         className="flex flex-col items-end gap-4 p-4 "
         onSubmit={handleSubmit(onSubmit)}

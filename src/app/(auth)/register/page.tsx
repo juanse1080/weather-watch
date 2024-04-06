@@ -1,13 +1,12 @@
 'use client'
 
 import { Button, Input } from '@/components/atoms'
+import useAuth from '@/hooks/useAuth'
 import useLazyFetch from '@/hooks/useLazyFetch'
 import { registerSchema, registerSchemaType } from '@/schemas/register'
 import { transformZodIssuesToBasicObject } from '@/utils/errors'
-import { saveState } from '@/utils/localStorage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
-import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { ZodIssue } from 'zod'
 
@@ -19,7 +18,7 @@ const defaultValues: Partial<registerSchemaType> = {
 }
 
 export default function RegisterPage() {
-  const router = useRouter()
+  const { login } = useAuth()
 
   const onError = (
     error: AxiosError<{
@@ -40,13 +39,15 @@ export default function RegisterPage() {
 
   const { fetchData, loading } = useLazyFetch<any, registerSchemaType>(
     'register',
-    onError,
   )
 
   const onSubmit = async (data: registerSchemaType) => {
-    const response = await fetchData({ data, method: 'POST' })
-    saveState('auth', response)
-    router.replace('/')
+    try {
+      const response = await fetchData({ data, method: 'POST' })
+      login(response)
+    } catch (error: any) {
+      onError(error)
+    }
   }
 
   const {
@@ -86,6 +87,7 @@ export default function RegisterPage() {
         fulWidth
         label="Password"
         error={!!errors.password}
+        type="password"
         helperText={errors?.password?.message}
         {...register('password')}
       />
@@ -94,6 +96,7 @@ export default function RegisterPage() {
         fulWidth
         label="Confirm password"
         error={!!errors.confirmPassword}
+        type="password"
         helperText={errors?.confirmPassword?.message}
         {...register('confirmPassword')}
       />

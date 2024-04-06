@@ -6,7 +6,6 @@ const useLazyFetch = <
   TData extends Record<string, unknown> | undefined = undefined,
 >(
   url: string,
-  onError?: (error: any) => void,
 ) => {
   const [response, setResponse] = useState<TResponse>()
   const [loading, setLoading] = useState<boolean>(false)
@@ -17,22 +16,22 @@ const useLazyFetch = <
       try {
         setLoading(true)
         const response = await axios(url, {
-          baseURL: 'http://localhost:3000/api',
+          baseURL: 'http://localhost:3000/api', // TODO: add env
           ...options,
         })
 
         setResponse(response.data as TResponse)
         setLoading(false)
-        
+
         return response.data as TResponse
       } catch (error) {
         setError(error)
         setLoading(false)
 
-        if (onError) onError(error)
+        throw error
       }
     },
-    [url, onError],
+    [url],
   )
 
   return {
