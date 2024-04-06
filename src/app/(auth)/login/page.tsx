@@ -7,6 +7,7 @@ import { loginSchema, loginSchemaType } from '@/schemas/login'
 import { transformZodIssuesToBasicObject } from '@/utils/errors'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
+import Link from 'next/link'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ZodIssue } from 'zod'
@@ -68,7 +69,7 @@ export default function LoginPage() {
         <div className="bg-red-50 w-full p-3 rounded-md">{apiError}</div>
       )}
       <form
-        className="flex flex-col items-end gap-4 p-4 "
+        className="flex flex-col items-center gap-4 p-4 "
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
@@ -89,8 +90,17 @@ export default function LoginPage() {
           helperText={errors?.password?.message}
           {...register('password')}
         />
+        <span>
+          ¿Don&apos;t have an account?{' '}
+          <Link
+            href="/register"
+            className="underline decoration-1 text-blue-500"
+          >
+            Create one
+          </Link>
+        </span>
         <Button type="submit" loading={loading}>
-          Enviar
+          Login
         </Button>
       </form>
     </>

@@ -7,6 +7,7 @@ import { registerSchema, registerSchemaType } from '@/schemas/register'
 import { transformZodIssuesToBasicObject } from '@/utils/errors'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
+import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { ZodIssue } from 'zod'
 
@@ -60,7 +61,7 @@ export default function RegisterPage() {
 
   return (
     <form
-      className="flex flex-col items-end gap-4 p-4"
+      className="flex flex-col items-center gap-4 p-4"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
@@ -98,8 +99,14 @@ export default function RegisterPage() {
         helperText={errors?.confirmPassword?.message}
         {...register('confirmPassword')}
       />
+      <span>
+        ¿You already have an account?{' '}
+        <Link href="/login" className="underline decoration-1 text-blue-500">
+          Sign in
+        </Link>
+      </span>
       <Button type="submit" loading={loading}>
-        Enviar
+        Register
       </Button>
     </form>
   )
