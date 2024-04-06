@@ -1,5 +1,5 @@
 import { RoleAction } from '@/enum/role'
-import { Pagination } from '@/interfaces'
+import { PaginationType } from '@/interfaces'
 import prisma from '@/libs/prisma'
 import { checkAuth } from '@/utils/auth'
 import { getPaginationParams } from '@/utils/request'
@@ -25,7 +25,7 @@ export async function GET(request: AuthenticatedRequest) {
     })
     const count = await prisma.role.count()
 
-    const response: Pagination<Role> = {
+    const response: PaginationType<Role> = {
       data,
       metadata: {
         page,

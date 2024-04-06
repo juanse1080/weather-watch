@@ -2,6 +2,7 @@ import { UserAction } from '@/enum/user'
 import { ParamsRequest } from '@/interfaces'
 import prisma from '@/libs/prisma'
 import { checkAuth } from '@/utils/auth'
+import { getUser } from '@/utils/getUser'
 import { transformUser } from '@/utils/models'
 import {
   ForbiddenRequestResponse,
@@ -20,20 +21,7 @@ export async function GET(
     if (!session) return UnauthorizedRequestResponse()
     if (!permission) return ForbiddenRequestResponse()
 
-    const data = await prisma.user.findFirst({
-      include: {
-        roles: {
-          select: {
-            code: true,
-            actions: true,
-          },
-        },
-      },
-      where: {
-        id: +params.id,
-      },
-    })
-
+    const data = await getUser(+params.id)
     if (!data) return NotFoundResponse('User not found')
 
     return NextResponse.json(transformUser(data), { status: 200 })
@@ -51,20 +39,7 @@ export async function DELETE(
     if (!session) return UnauthorizedRequestResponse()
     if (!permission) return ForbiddenRequestResponse()
 
-    const data = await prisma.user.findFirst({
-      include: {
-        roles: {
-          select: {
-            code: true,
-            actions: true,
-          },
-        },
-      },
-      where: {
-        id: +params.id,
-      },
-    })
-
+    const data = await getUser(+params.id)
     if (!data) return NotFoundResponse('User not found')
 
     await prisma.user.delete({

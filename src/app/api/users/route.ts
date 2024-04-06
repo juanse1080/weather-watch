@@ -1,8 +1,6 @@
 import { UserAction } from '@/enum/user'
-import { Pagination, UserModel } from '@/interfaces'
-import prisma from '@/libs/prisma'
 import { checkAuth } from '@/utils/auth'
-import { transformUser } from '@/utils/models'
+import { getUsers } from '@/utils/getUser'
 import { getPaginationParams } from '@/utils/request'
 import {
   ForbiddenRequestResponse,
@@ -17,31 +15,8 @@ export async function GET(request: AuthenticatedRequest) {
     if (!session) return UnauthorizedRequestResponse()
     if (!permission) return ForbiddenRequestResponse()
 
-    const { page, per_page } = getPaginationParams(request.nextUrl.searchParams)
-
-    const data = await prisma.user.findMany({
-      include: {
-        roles: {
-          select: {
-            code: true,
-            actions: true,
-          },
-        },
-      },
-      skip: page * per_page,
-      take: per_page,
-    })
-
-    const count = await prisma.user.count()
-
-    const response: Pagination<UserModel> = {
-      data: data.map((user) => transformUser(user)),
-      metadata: {
-        page,
-        per_page,
-        count,
-      },
-    }
+    const params = getPaginationParams(request.nextUrl.searchParams)
+    const response = await getUsers(params)
 
     return NextResponse.json(response, { status: 200 })
   } catch (error) {
