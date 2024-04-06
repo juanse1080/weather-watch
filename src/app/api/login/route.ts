@@ -6,10 +6,10 @@ import {
   BadRequestResponse,
   InternalErrorResponse,
   UnauthorizedRequestResponse,
+  getTokenAndSetCookie,
 } from '@/utils/response'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,23 +40,7 @@ export async function POST(request: NextRequest) {
 
     const currentUser = transformUser(data)
 
-    const token = jwt.sign({ data: currentUser }, process.env.SECRET_KEY, {
-      expiresIn: +process.env.EXPIRED_TOKEN,
-    })
-
-    const response = NextResponse.json(
-      { ...currentUser, token },
-      { status: 200 },
-    )
-
-    response.cookies.set('auth_cookie', token, {
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: +process.env.EXPIRED_TOKEN,
-      path: '/',
-    })
-
-    return response
+    return getTokenAndSetCookie(currentUser)
   } catch (error) {
     return InternalErrorResponse(error)
   }

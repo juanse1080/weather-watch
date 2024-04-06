@@ -2,10 +2,13 @@ import prisma from '@/libs/prisma'
 import { registerSchema } from '@/schemas/register'
 import { transformZodIssues } from '@/utils/errors'
 import { transformUser } from '@/utils/models'
-import { BadRequestResponse, InternalErrorResponse } from '@/utils/response'
+import {
+  BadRequestResponse,
+  InternalErrorResponse,
+  getTokenAndSetCookie,
+} from '@/utils/response'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
@@ -57,25 +60,7 @@ export async function POST(request: NextRequest) {
       }),
     )
 
-    const token = jwt.sign({ data: newUser }, process.env.SECRET_KEY, {
-      expiresIn: +process.env.EXPIRED_TOKEN,
-    })
-
-    const response = NextResponse.json(
-      { ...newUser, token },
-      {
-        status: 200,
-      },
-    )
-
-    response.cookies.set('auth_cookie', token, {
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: +process.env.EXPIRED_TOKEN,
-      path: '/',
-    })
-
-    return response
+    return getTokenAndSetCookie(newUser)
   } catch (error) {
     return InternalErrorResponse(error)
   }
