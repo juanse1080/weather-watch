@@ -40,11 +40,11 @@ export default function LoginPage() {
       setApiError(error.response?.data?.message)
   }
 
-  const { fetchData, loading } = useLazyFetch<any, loginSchemaType>('login')
+  const { fetchData, loading } = useLazyFetch<any, loginSchemaType>()
 
   const onSubmit = async (data: loginSchemaType) => {
     try {
-      const response = await fetchData({ data, method: 'POST' })
+      const response = await fetchData('login', { data, method: 'POST' })
       setApiError(undefined)
       login(response)
     } catch (error: any) {

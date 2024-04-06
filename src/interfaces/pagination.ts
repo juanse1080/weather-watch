@@ -1,4 +1,4 @@
-export type Pagination<T extends Record<string, any>> = {
+export type PaginationType<T extends Record<string, any>> = {
   data: T[]
   metadata: {
     page: number

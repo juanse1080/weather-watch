@@ -4,15 +4,13 @@ import { useCallback, useState } from 'react'
 const useLazyFetch = <
   TResponse extends Record<string, unknown>,
   TData extends Record<string, unknown> | undefined = undefined,
->(
-  url: string,
-) => {
+>() => {
   const [response, setResponse] = useState<TResponse>()
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<any>()
 
   const fetchData = useCallback(
-    async (options: AxiosRequestConfig<TData>) => {
+    async (url: string, options: AxiosRequestConfig<TData>) => {
       try {
         setLoading(true)
         const response = await axios(url, {
@@ -31,7 +29,7 @@ const useLazyFetch = <
         throw error
       }
     },
-    [url],
+    [],
   )
 
   return {
@@ -39,6 +37,7 @@ const useLazyFetch = <
     loading,
     error,
     fetchData,
+    setResponse,
   }
 }
 

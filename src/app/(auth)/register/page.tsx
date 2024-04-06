@@ -37,13 +37,11 @@ export default function RegisterPage() {
     }
   }
 
-  const { fetchData, loading } = useLazyFetch<any, registerSchemaType>(
-    'register',
-  )
+  const { fetchData, loading } = useLazyFetch<any, registerSchemaType>()
 
   const onSubmit = async (data: registerSchemaType) => {
     try {
-      const response = await fetchData({ data, method: 'POST' })
+      const response = await fetchData('register', { data, method: 'POST' })
       login(response)
     } catch (error: any) {
       onError(error)

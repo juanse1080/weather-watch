@@ -9,11 +9,11 @@ const useFetch = <
   url: string,
   options: AxiosRequestConfig<TData>,
 ) => {
-  const { fetchData, ...rest } = useLazyFetch<TResponse, TData>(url)
+  const { fetchData, ...rest } = useLazyFetch<TResponse, TData>()
 
   useEffect(() => {
-    fetchData(options)
-  }, [fetchData, options])
+    fetchData(url, options)
+  }, [fetchData, options, url])
 
   return { ...rest, fetchData }
 }
