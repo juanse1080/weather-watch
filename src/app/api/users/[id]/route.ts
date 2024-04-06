@@ -1,14 +1,24 @@
+import { UserAction } from '@/enum/user'
 import { ParamsRequest } from '@/interfaces'
 import prisma from '@/libs/prisma'
-import { transformUser } from '@/utils/models'
-import { InternalErrorResponse, NotFoundResponse } from '@/utils/response'
-import { NextRequest, NextResponse } from 'next/server'
+import { checkAuth, transformUser } from '@/utils/models'
+import {
+  ForbiddenRequestResponse,
+  InternalErrorResponse,
+  NotFoundResponse,
+  UnauthorizedRequestResponse,
+} from '@/utils/response'
+import { AuthenticatedRequest, NextResponse } from 'next/server'
 
 export async function GET(
-  _request: NextRequest,
+  request: AuthenticatedRequest,
   { params }: ParamsRequest<{ id: string }>,
 ) {
   try {
+    const { session, permission } = await checkAuth(request, UserAction.READ)
+    if (!session) return UnauthorizedRequestResponse()
+    if (!permission) return ForbiddenRequestResponse()
+
     const data = await prisma.user.findFirst({
       include: {
         roles: {
@@ -32,10 +42,14 @@ export async function GET(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: AuthenticatedRequest,
   { params }: ParamsRequest<{ id: string }>,
 ) {
   try {
+    const { session, permission } = await checkAuth(request, UserAction.DELETE)
+    if (!session) return UnauthorizedRequestResponse()
+    if (!permission) return ForbiddenRequestResponse()
+
     const data = await prisma.user.findFirst({
       include: {
         roles: {
