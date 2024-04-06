@@ -8,7 +8,10 @@ export const NotFoundResponse = (message: string = 'Not found') =>
 export const InternalErrorResponse = (
   error: unknown,
   message: string = 'Internal error',
-) => NextResponse.json({ message, error }, { status: 500 })
+) => {
+  console.log('ERROR:', { error })
+  return NextResponse.json({ message, error }, { status: 500 })
+}
 
 export const BadRequestResponse = (
   errors?: unknown,
