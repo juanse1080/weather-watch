@@ -1,7 +1,7 @@
-import { Button } from '@/components/atoms'
 import { WeatherList } from '@/components/organism'
 import { getWeather } from '@/utils/getWeather'
 import { addDays, addHours, format, startOfDay } from 'date-fns'
+import ButtonRedirect from './redirect'
 import Weather from './weather'
 
 const parts = ['Morning', 'Afternoon', 'Evening', 'Overnight']
@@ -97,13 +97,19 @@ async function HomePage() {
         items={dataPartDays}
         title={`Today's Forecast for ${location}`}
       >
-        <Button className="m-4">Next 48 hours</Button>
+        <ButtonRedirect path="/by-hours" className="m-4">
+          Next 48 hours
+        </ButtonRedirect>
       </WeatherList>
       <WeatherList items={dataByHours} title="Hourly Forecast">
-        <Button className="m-4">Next 48 hours</Button>
+        <ButtonRedirect path="/by-hours" className="m-4">
+          Next 48 hours
+        </ButtonRedirect>
       </WeatherList>
       <WeatherList items={dataByDays} title="Daily Forecast">
-        <Button className="m-4">Next 10 days</Button>
+        <ButtonRedirect path="/by-days" className="m-4">
+          Next 10 days
+        </ButtonRedirect>
       </WeatherList>
     </div>
   )

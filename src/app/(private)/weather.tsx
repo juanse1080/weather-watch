@@ -37,6 +37,7 @@ function Weather({
       <div className="p-4">
         <Button
           fullWidth
+          disabled
           className="bg-translucid justify-center hover:bg-blue-900"
         >
           <svg

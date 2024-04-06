@@ -14,6 +14,8 @@ const RootLayout = async ({
     <>
       <nav className="p-4 border-b flex gap-4 border-[#e5eaf2]">
         <Link href="/">Home</Link>
+        <Link href="/by-hours">By hours</Link>
+        <Link href="/by-days">By days</Link>
         <span className="flex-grow"></span>
         {shouldReadUsers && <Link href="/users">Users</Link>}
         <Link href="/">{auth?.name}</Link>
