@@ -1,9 +1,6 @@
-import { AuthModel, RolePrisma, UserModel, UserPrisma } from '@/interfaces'
-import prisma from '@/libs/prisma'
+'use server'
 
-import jwt from 'jsonwebtoken'
-import { AuthenticatedRequest, NextRequest } from 'next/server'
-import { getCookie } from './request'
+import { RolePrisma, UserModel, UserPrisma } from '@/interfaces'
 
 export const rolesToActions = (roles: RolePrisma[]) => {
   const getActions = (role: RolePrisma) =>
@@ -25,50 +22,4 @@ export const transformUser = (user: UserPrisma) => {
   }
 
   return transformUser
-}
-
-export const getAuth = (request: NextRequest) => {
-  const token = getCookie(request.cookies, 'token')
-  if (!token) return
-
-  const decodedToken = jwt.decode(token, {
-    complete: true,
-  })
-
-  return decodedToken?.payload as AuthModel
-}
-
-export const checkAuth = async (
-  request: AuthenticatedRequest,
-  action?: string,
-) => {
-  const sessionError = {
-    session: false,
-    permission: false,
-  }
-
-  const auth = getAuth(request)
-  if (!auth) return sessionError
-
-  const data = await prisma.user.findFirst({
-    include: {
-      roles: {
-        select: {
-          code: true,
-          actions: true,
-        },
-      },
-    },
-    where: {
-      id: +auth.id,
-    },
-  })
-
-  if (!data) return sessionError
-
-  request.auth = auth
-  return {
-    session: true,
-    permission: !action || auth.actions.includes(action),
-  }
 }

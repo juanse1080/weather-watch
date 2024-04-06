@@ -1,7 +1,8 @@
 import { UserAction } from '@/enum/user'
 import { Pagination, UserModel } from '@/interfaces'
 import prisma from '@/libs/prisma'
-import { checkAuth, transformUser } from '@/utils/models'
+import { checkAuth } from '@/utils/auth'
+import { transformUser } from '@/utils/models'
 import { getPaginationParams } from '@/utils/request'
 import {
   ForbiddenRequestResponse,
@@ -12,7 +13,7 @@ import { AuthenticatedRequest, NextResponse } from 'next/server'
 
 export async function GET(request: AuthenticatedRequest) {
   try {
-    const { session, permission } = await checkAuth(request, UserAction.READ)
+    const { session, permission } = await checkAuth(UserAction.READ)
     if (!session) return UnauthorizedRequestResponse()
     if (!permission) return ForbiddenRequestResponse()
 

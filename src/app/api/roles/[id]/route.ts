@@ -1,21 +1,21 @@
 import { RoleAction } from '@/enum/role'
 import { ParamsRequest } from '@/interfaces'
 import prisma from '@/libs/prisma'
-import { checkAuth } from '@/utils/models'
+import { checkAuth } from '@/utils/auth'
 import {
   ForbiddenRequestResponse,
   InternalErrorResponse,
   NotFoundResponse,
   UnauthorizedRequestResponse,
 } from '@/utils/response'
-import { AuthenticatedRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
-  request: AuthenticatedRequest,
+  _request: NextRequest,
   { params }: ParamsRequest<{ id: string }>,
 ) {
   try {
-    const { session, permission } = await checkAuth(request, RoleAction.READ)
+    const { session, permission } = await checkAuth(RoleAction.READ)
     if (!session) return UnauthorizedRequestResponse()
     if (!permission) return ForbiddenRequestResponse()
 
@@ -35,11 +35,11 @@ export async function GET(
 }
 
 export async function DELETE(
-  request: AuthenticatedRequest,
+  _request: NextRequest,
   { params }: ParamsRequest<{ id: string }>,
 ) {
   try {
-    const { session, permission } = await checkAuth(request, RoleAction.DELETE)
+    const { session, permission } = await checkAuth(RoleAction.DELETE)
     if (!session) return UnauthorizedRequestResponse()
     if (!permission) return ForbiddenRequestResponse()
 

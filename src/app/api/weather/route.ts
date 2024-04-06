@@ -1,5 +1,5 @@
+import { checkAuth } from '@/utils/auth'
 import { WeatherParams, getWeather } from '@/utils/getWeather'
-import { checkAuth } from '@/utils/models'
 import { queryParams } from '@/utils/request'
 import {
   InternalErrorResponse,
@@ -9,7 +9,7 @@ import { AuthenticatedRequest, NextResponse } from 'next/server'
 
 export async function GET(request: AuthenticatedRequest) {
   try {
-    const { session } = await checkAuth(request)
+    const { session } = await checkAuth()
     if (!session) return UnauthorizedRequestResponse()
 
     const params = queryParams<WeatherParams>(request.nextUrl.searchParams)

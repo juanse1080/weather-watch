@@ -1,21 +1,22 @@
 import { UserAction } from '@/enum/user'
 import { ParamsRequest } from '@/interfaces'
 import prisma from '@/libs/prisma'
-import { checkAuth, transformUser } from '@/utils/models'
+import { checkAuth } from '@/utils/auth'
+import { transformUser } from '@/utils/models'
 import {
   ForbiddenRequestResponse,
   InternalErrorResponse,
   NotFoundResponse,
   UnauthorizedRequestResponse,
 } from '@/utils/response'
-import { AuthenticatedRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
-  request: AuthenticatedRequest,
+  _request: NextRequest,
   { params }: ParamsRequest<{ id: string }>,
 ) {
   try {
-    const { session, permission } = await checkAuth(request, UserAction.READ)
+    const { session, permission } = await checkAuth(UserAction.READ)
     if (!session) return UnauthorizedRequestResponse()
     if (!permission) return ForbiddenRequestResponse()
 
@@ -42,11 +43,11 @@ export async function GET(
 }
 
 export async function DELETE(
-  request: AuthenticatedRequest,
+  _request: NextRequest,
   { params }: ParamsRequest<{ id: string }>,
 ) {
   try {
-    const { session, permission } = await checkAuth(request, UserAction.DELETE)
+    const { session, permission } = await checkAuth(UserAction.DELETE)
     if (!session) return UnauthorizedRequestResponse()
     if (!permission) return ForbiddenRequestResponse()
 

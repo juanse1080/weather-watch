@@ -1,5 +1,5 @@
 import { PaginationFormQueryParams, PaginationParams } from '@/interfaces'
-import { RequestCookies } from 'next/dist/server/web/spec-extension/cookies'
+import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies'
 
 export const queryParams = <T extends Record<string, any>>(
   urlParams: URLSearchParams,
@@ -25,6 +25,6 @@ export const objToQueryParams = (params: Record<string, any>) => {
   return searchParams.toString()
 }
 
-export const getCookie = (cookies: RequestCookies, key: string) => {
+export const getCookie = (cookies: ReadonlyRequestCookies, key: string) => {
   return cookies.get(key)?.value
 }

@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     const isCorrect: boolean = await bcrypt.compare(password, data.password)
     if (!isCorrect) return UnauthorizedRequestResponse()
 
-    const currentUser = transformUser(data)
+    const currentUser = await transformUser(data)
 
     return getTokenAndSetCookie(currentUser)
   } catch (error) {
