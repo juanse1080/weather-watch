@@ -24,7 +24,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={merge(
-          'flex items-center w-min bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg whitespace-nowrap',
+          'flex justify-center items-center w-min bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg whitespace-nowrap',
           {
             'cursor-not-allowed opacity-50 hover:bg-blue-500': disabled,
             'w-full': fullWidth,
