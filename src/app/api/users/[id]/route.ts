@@ -1,8 +1,8 @@
 import { UserAction } from '@/enum/user'
 import { ParamsRequest } from '@/interfaces'
 import prisma from '@/libs/prisma'
+import { getUser } from '@/services/user'
 import { checkAuth } from '@/utils/auth'
-import { getUser } from '@/utils/getUser'
 import { transformUser } from '@/utils/models'
 import {
   ForbiddenRequestResponse,

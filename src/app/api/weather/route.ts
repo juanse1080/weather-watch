@@ -1,5 +1,5 @@
+import { WeatherParams, getWeather } from '@/services/weather'
 import { checkAuth } from '@/utils/auth'
-import { WeatherParams, getWeather } from '@/utils/getWeather'
 import { queryParams } from '@/utils/request'
 import {
   InternalErrorResponse,

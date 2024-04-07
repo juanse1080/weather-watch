@@ -1,9 +1,7 @@
-'use server'
-
 import { AuthModel } from '@/interfaces'
-import prisma from '@/libs/prisma'
 import { cookies } from 'next/headers'
 
+import { getUser } from '@/services/user'
 import jwt from 'jsonwebtoken'
 import { transformUser } from './models'
 import { getCookie } from './request'
@@ -23,21 +21,9 @@ export const validateAuth = async () => {
   const auth = await getAuth()
   if (!auth) return
 
-  const data = await prisma.user.findFirst({
-    include: {
-      roles: {
-        select: {
-          code: true,
-          actions: true,
-        },
-      },
-    },
-    where: {
-      id: auth.id,
-    },
-  })
-
+  const data = await getUser(auth.id)
   if (!data) return
+
   return data
 }
 
