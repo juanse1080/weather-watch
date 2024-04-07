@@ -19,15 +19,9 @@ export const getAuth = async () => {
   return decodedToken?.payload as AuthModel
 }
 
-export const checkAuth = async (action?: string) => {
-  const sessionError = {
-    session: false,
-    permission: false,
-    auth: undefined,
-  }
-
+export const validateAuth = async () => {
   const auth = await getAuth()
-  if (!auth) return sessionError
+  if (!auth) return
 
   const data = await prisma.user.findFirst({
     include: {
@@ -39,13 +33,25 @@ export const checkAuth = async (action?: string) => {
       },
     },
     where: {
-      id: +auth.id,
+      id: auth.id,
     },
   })
 
-  if (!data) return sessionError
+  if (!data) return
+  return data
+}
 
-  const user = transformUser(data)
+export const checkAuth = async (action?: string) => {
+  const sessionError = {
+    session: false,
+    permission: false,
+    auth: undefined,
+  }
+
+  const auth = await validateAuth()
+  if (!auth) return sessionError
+
+  const user = transformUser(auth)
 
   return {
     auth,
