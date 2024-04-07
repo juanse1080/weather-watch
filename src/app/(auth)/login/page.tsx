@@ -93,6 +93,7 @@ export default function LoginPage() {
         <span className="text-sm">
           ¿Don&apos;t have an account?{' '}
           <Link
+            prefetch
             href="/register"
             className="underline decoration-1 text-blue-500"
           >
