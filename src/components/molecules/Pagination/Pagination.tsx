@@ -27,6 +27,7 @@ const Pagination = ({ page, per_page, count, url }: PaginationProps) => {
               aria-label="Pagination"
             >
               <Link
+                prefetch
                 href={`${url}?page=${page - 1}&per_page=${per_page}`}
                 className={merge(
                   'relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm text-gray-500 hover:bg-gray-50',
@@ -50,6 +51,7 @@ const Pagination = ({ page, per_page, count, url }: PaginationProps) => {
               </Link>
 
               <Link
+                prefetch
                 href={`${url}?page=${page + 1}&per_page=${per_page}`}
                 className={merge(
                   'relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm  text-gray-500 hover:bg-gray-50',

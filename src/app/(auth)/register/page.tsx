@@ -101,7 +101,11 @@ export default function RegisterPage() {
       />
       <span className="text-sm">
         ¿You already have an account?{' '}
-        <Link href="/login" className="underline decoration-1 text-blue-500">
+        <Link
+          prefetch
+          href="/login"
+          className="underline decoration-1 text-blue-500"
+        >
           Sign in
         </Link>
       </span>

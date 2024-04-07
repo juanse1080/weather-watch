@@ -26,11 +26,7 @@ const ByDaysPage = async ({ searchParams }: any) => {
     probability_precipitation: item['prob_precip_12h:p'],
   }))
 
-  return (
-    <div className="bg-white flex gap-4 flex-col">
-      <WeatherList items={dataByHours} title={title} />
-    </div>
-  )
+  return <WeatherList items={dataByHours} title={title} />
 }
 
 export default ByDaysPage

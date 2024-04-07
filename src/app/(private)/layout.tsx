@@ -11,11 +11,21 @@ const RootLayout = async ({ children }: Readonly<PropsWithChildren>) => {
   return (
     <>
       <nav className="p-4 border-b flex gap-4 border-[#e5eaf2]">
-        <Link href="/">Home</Link>
-        <Link href="/by-hours">By hours</Link>
-        <Link href="/by-days">By days</Link>
+        <Link prefetch href="/">
+          Home
+        </Link>
+        <Link prefetch href="/by-hours">
+          By hours
+        </Link>
+        <Link prefetch href="/by-days">
+          By days
+        </Link>
         <span className="flex-grow"></span>
-        {shouldReadUsers && <Link href="/users">Users</Link>}
+        {shouldReadUsers && (
+          <Link prefetch href="/users">
+            Users
+          </Link>
+        )}
         <Link href="/">{auth?.name}</Link>
         <LogoutButton />
       </nav>

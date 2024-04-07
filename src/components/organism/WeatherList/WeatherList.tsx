@@ -3,7 +3,7 @@ import { merge } from '@/utils/merge-clsx'
 import { closestTo } from 'date-fns'
 import { PropsWithChildren } from 'react'
 
-export interface PartsOfDayProps {
+export interface WeatherListProps {
   title: string
   items: {
     name: string
@@ -14,11 +14,11 @@ export interface PartsOfDayProps {
   }[]
 }
 
-function PartsOfDay({
+function WeatherList({
   title,
   items,
   children,
-}: Readonly<PropsWithChildren<PartsOfDayProps>>) {
+}: Readonly<PropsWithChildren<WeatherListProps>>) {
   const currentDate = new Date()
 
   const currentPart = closestTo(
@@ -69,4 +69,4 @@ function PartsOfDay({
   )
 }
 
-export default PartsOfDay
+export default WeatherList
