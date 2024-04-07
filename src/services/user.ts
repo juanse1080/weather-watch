@@ -1,6 +1,6 @@
 import { PaginationParams, PaginationType, UserModel } from '@/interfaces'
 import prisma from '@/libs/prisma'
-import { transformUser } from './models'
+import { transformUser } from '../utils/models'
 
 export const getUsers = async ({ page, per_page }: PaginationParams) => {
   const data = await prisma.user.findMany({

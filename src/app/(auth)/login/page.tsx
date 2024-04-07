@@ -90,7 +90,7 @@ export default function LoginPage() {
           helperText={errors?.password?.message}
           {...register('password')}
         />
-        <span>
+        <span className="text-sm">
           ¿Don&apos;t have an account?{' '}
           <Link
             href="/register"

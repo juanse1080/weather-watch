@@ -11,6 +11,9 @@ const config: Config = {
       colors: {
         translucid: '#0000008c',
       },
+      spacing: {
+        '100': '25rem',
+      },
     },
   },
   plugins: [],

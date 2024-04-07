@@ -1,6 +1,6 @@
 import { UserAction } from '@/enum/user'
+import { getUsers } from '@/services/user'
 import { checkAuth } from '@/utils/auth'
-import { getUsers } from '@/utils/getUser'
 import { getPaginationParams } from '@/utils/request'
 import {
   ForbiddenRequestResponse,

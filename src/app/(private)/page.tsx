@@ -1,5 +1,5 @@
 import { WeatherList } from '@/components/organism'
-import { getWeather } from '@/utils/getWeather'
+import { getWeather } from '@/services/weather'
 import { addDays, addHours, format, startOfDay } from 'date-fns'
 import ButtonRedirect from './redirect'
 import Weather from './weather'

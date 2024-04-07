@@ -1,4 +1,4 @@
-import { getUsers } from '@/utils/getUser'
+import { getUsers } from '@/services/user'
 import UsersTable from './table'
 
 const UsersPage = async ({ searchParams }: any) => {

@@ -1,5 +1,5 @@
 import { WeatherList } from '@/components/organism'
-import { getWeather } from '@/utils/getWeather'
+import { getWeather } from '@/services/weather'
 import { addDays, format } from 'date-fns'
 
 const ByDaysPage = async ({ searchParams }: any) => {

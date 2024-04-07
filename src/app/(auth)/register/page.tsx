@@ -99,7 +99,7 @@ export default function RegisterPage() {
         helperText={errors?.confirmPassword?.message}
         {...register('confirmPassword')}
       />
-      <span>
+      <span className="text-sm">
         ¿You already have an account?{' '}
         <Link href="/login" className="underline decoration-1 text-blue-500">
           Sign in

@@ -1,9 +1,7 @@
-'use server'
-
 import { AuthModel } from '@/interfaces'
-import prisma from '@/libs/prisma'
 import { cookies } from 'next/headers'
 
+import { getUser } from '@/services/user'
 import jwt from 'jsonwebtoken'
 import { transformUser } from './models'
 import { getCookie } from './request'
@@ -19,6 +17,16 @@ export const getAuth = async () => {
   return decodedToken?.payload as AuthModel
 }
 
+export const validateAuth = async () => {
+  const auth = await getAuth()
+  if (!auth) return
+
+  const data = await getUser(auth.id)
+  if (!data) return
+
+  return data
+}
+
 export const checkAuth = async (action?: string) => {
   const sessionError = {
     session: false,
@@ -26,26 +34,10 @@ export const checkAuth = async (action?: string) => {
     auth: undefined,
   }
 
-  const auth = await getAuth()
+  const auth = await validateAuth()
   if (!auth) return sessionError
 
-  const data = await prisma.user.findFirst({
-    include: {
-      roles: {
-        select: {
-          code: true,
-          actions: true,
-        },
-      },
-    },
-    where: {
-      id: +auth.id,
-    },
-  })
-
-  if (!data) return sessionError
-
-  const user = transformUser(data)
+  const user = transformUser(auth)
 
   return {
     auth,
