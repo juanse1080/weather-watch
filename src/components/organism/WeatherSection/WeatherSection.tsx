@@ -1,7 +1,7 @@
 import { Button } from '@/components/atoms'
 import { WeatherIcon } from '@/components/molecules'
 
-export interface WeatherProps {
+export interface WeatherSectionProps {
   location: string
   temperature: number
   precipitation: number
@@ -13,14 +13,14 @@ export interface WeatherProps {
   }[]
 }
 
-function Weather({
+function WeatherSection({
   location,
   temperature,
   precipitation,
   description,
   notice,
   items,
-}: Readonly<WeatherProps>) {
+}: Readonly<WeatherSectionProps>) {
   return (
     <div className="bg-blue-500 text-white rounded-lg overflow-hidden">
       <div className="bg-translucid p-4 text-xl font-bold">{location}</div>
@@ -57,4 +57,4 @@ function Weather({
   )
 }
 
-export default Weather
+export default WeatherSection
