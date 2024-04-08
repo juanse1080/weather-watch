@@ -1,10 +1,12 @@
 import { UserAction } from '@/enum/user'
 import { getAuth } from '@/utils/auth'
 import Link from 'next/link'
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, ReactNode } from 'react'
 import LogoutButton from './logout'
 
-const RootLayout = async ({ children }: Readonly<PropsWithChildren>) => {
+const RootLayout = async ({
+  children,
+}: Readonly<PropsWithChildren<{ today: ReactNode }>>) => {
   const auth = await getAuth()
   const shouldReadUsers = auth?.actions.includes(UserAction.READ)
 
@@ -30,7 +32,9 @@ const RootLayout = async ({ children }: Readonly<PropsWithChildren>) => {
         <LogoutButton />
       </nav>
       <div className="py-6 px-4 h-[calc(100%-56px)] overflow-y-auto">
-        <div className="container mx-auto">{children}</div>
+        <div className="container mx-auto">
+          <div className="flex gap-4 flex-col">{children}</div>
+        </div>
       </div>
     </>
   )
